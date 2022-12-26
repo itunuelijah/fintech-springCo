@@ -64,7 +64,7 @@ class CustomerServiceImplTest {
 //       // assertThat(customer2).isIn(customerService.listCustomers());
 //      //  assertThat(3).matches((Predicate<? super Integer>) customerService.listCustomers());
 //
-//    }
+}
 
     @Test
     void getCustomer() {
