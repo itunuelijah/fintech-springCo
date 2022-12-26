@@ -40,11 +40,6 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
         log.info("saving new customer");
         Customer customer = dtoMapper.fromCustomerDTO(customerDTO);
-        try {
-            accountService.saveFlexAccount();
-        } catch (CustomerNotFoundException e) {
-            e.printStackTrace();
-        }
         Customer savedCustomer = customerRepository.save(customer);
         return dtoMapper.fromCustomer(savedCustomer);
 

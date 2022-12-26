@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface AccountService {
 
-    Account getAccount(String accountId) throws AccountNotFoundException;
+    AccountDTO getAccount(String accountId) throws AccountNotFoundException;
 
     void debit(String accountId, double amount, String description) throws AccountNotFoundException, BalanceNotSufficientException, BalanceNotSufficientException;
 

@@ -1,7 +1,7 @@
 package com.fintech.SpringCo.services;
 
 import com.fintech.SpringCo.data.dtos.CustomerDTO;
-import com.fintech.SpringCo.data.dtos.FlexDTO;
+import com.fintech.SpringCo.data.models.Account;
 import com.fintech.SpringCo.mappers.AccountMapperImpl;
 import com.fintech.SpringCo.web.exception.AccountNotFoundException;
 import com.fintech.SpringCo.web.exception.CustomerNotFoundException;
@@ -24,7 +24,7 @@ class CustomerServiceImplTest {
     AccountService accountService;
 @Autowired
     AccountMapperImpl accountMapper;
-    CustomerDTO customerDTO;
+
 
     @BeforeEach
     void setUp() {
@@ -34,19 +34,18 @@ class CustomerServiceImplTest {
     void tearDown() {
     }
 
-//    @Test
-//    CustomerDTO registerCustomer(CustomerDTO customerDTO) throws CustomerNotFoundException {
-//        customerDTO.setId(12L);
+    @Test
+
+    void registerCustomer()  {
+
+//        CustomerDTO customerDTO = new CustomerDTO();
+//        customerDTO.setId(5676l);
 //        customerDTO.setName("Ade");
 //        customerDTO.setEmail("ade@gmail.com");
-//        assertThat(customerDTO.getName().equals("Ade"));
-//        FlexDTO flexDTO = new FlexDTO();
-//        flexDTO.setId("1L");
-//        flexDTO.setBalance(50000);
 //        CustomerDTO customer = null;
 //        customer = customerService.registerCustomer(customerDTO);
 //        assertThat(customer).isNotNull();
-//        assertThat(customer.getName().equals("Ade"));
+//       // assertThat(customer.getName().equals("Ade"));
 //
 //    }
 //
@@ -65,7 +64,7 @@ class CustomerServiceImplTest {
 //       // assertThat(customer2).isIn(customerService.listCustomers());
 //      //  assertThat(3).matches((Predicate<? super Integer>) customerService.listCustomers());
 //
-//    }
+}
 
     @Test
     void getCustomer() {

@@ -46,29 +46,24 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Account getAccount(String accountId) throws AccountNotFoundException {
+    public AccountDTO getAccount(String accountId) throws AccountNotFoundException {
 
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-        if (account instanceof Flex) {
-            Flex flex = (Flex) account;
-            return flex;
-        } else if (account instanceof Deluxe) {
-            Deluxe deluxe = (Deluxe) account;
-            return deluxe;
-        } else if (account instanceof Piggy) {
-            Piggy piggy = (Piggy) account;
-            return piggy;
-        } else if (account instanceof Supa) {
-            Supa supa = (Supa) account;
-            return supa;
+        if (account instanceof Flex flex) {
+            return dtoMapper.fromFlex(flex);
+        } else if (account instanceof Deluxe deluxe) {
+            return dtoMapper.fromDeluxe(deluxe);
+        } else if (account instanceof Piggy piggy) {
+            return dtoMapper.fromPiggy(piggy);
+        } else if (account instanceof Supa supa) {
+            return dtoMapper.fromSupa(supa);
         } else {
             Viva viva = (Viva) account;
-            return  viva;
+            return dtoMapper.fromViva(viva);
         }
     }
-
 
     @Override
     public void debit(String accountId, double amount, String description) throws AccountNotFoundException, BalanceNotSufficientException {
@@ -122,20 +117,14 @@ public class AccountServiceImpl implements AccountService {
     public Flex saveFlexAccount()
             throws CustomerNotFoundException {
         double initialBalance = 0.0, interestRate = 0.0;
-        CustomerDTO customerDTO = null;
-        Customer customer = customerRepository.findById(customerDTO.getId()).orElse(null);
-
-        if (customer == null) {
-            throw new CustomerNotFoundException("Customer not found");
-        }
         Flex flex = new Flex();
         flex.setId(UUID.randomUUID().toString());
         flex.setCreatedAt(new Date());
         flex.setBalance(initialBalance);
-        flex.setCustomer(customer);
         flex.setInterestRate(interestRate);
         Flex savedFlex = accountRepository.save(flex);
-        customer.addAccount(savedFlex);
+      //  Customer customer = new Customer();
+      //  customer.addAccount(savedFlex);
         return savedFlex;
     }
 
