@@ -14,8 +14,16 @@ public class CustomerDTO {
 		this.email = email;
 		this.account = account;
 	}
-	public CustomerDTO() {
+	public CustomerDTO(long id, String ade, String email, AccountDTO account) {
 		super();
+	}
+
+    public CustomerDTO(long l, String ade, String s) {
+
+    }
+
+	public CustomerDTO() {
+
 	}
 
 

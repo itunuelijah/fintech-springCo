@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AccountMapperImpl {
-	
+
 	public CustomerDTO fromCustomer(Customer customer) {
 		CustomerDTO customerDTO = new CustomerDTO();
 		BeanUtils.copyProperties(customer, customerDTO);
 		return customerDTO;
 	}
-	
+
 	public Customer fromCustomerDTO(CustomerDTO customerDTO) {
 		Customer customer = new Customer();
 		BeanUtils.copyProperties(customerDTO, customer);
@@ -69,8 +69,6 @@ public class AccountMapperImpl {
 		return null;
 
 	}
-
-
 
 
 	public SupaDTO fromSupa(Supa supa) {
