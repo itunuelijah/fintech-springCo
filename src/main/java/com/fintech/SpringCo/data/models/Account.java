@@ -1,8 +1,9 @@
 package com.fintech.SpringCo.data.models;
 
-import com.fintech.SpringCo.data.dtos.AccountDTO;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+
 import java.util.Date;
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.fintech.SpringCo.data.models;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 
