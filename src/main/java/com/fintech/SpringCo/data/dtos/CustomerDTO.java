@@ -1,6 +1,12 @@
 package com.fintech.SpringCo.data.dtos;
 import com.fintech.SpringCo.data.models.Account;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Builder
+@Data
+@NoArgsConstructor
 public class CustomerDTO {
 	
 	private Long id;
@@ -22,32 +28,6 @@ public class CustomerDTO {
 
     }
 
-	public CustomerDTO() {
 
-	}
-
-
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public Account getAccount(){
-		return account;
-	}
-	
 
 }

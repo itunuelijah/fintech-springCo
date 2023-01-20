@@ -1,6 +1,6 @@
 package com.fintech.SpringCo.data.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
