@@ -1,7 +1,7 @@
 #     Fintech SpringCo
 
 Technology stack:
-• Java 11 
+• Java 16 
 • Spring boot
 • MySQL
 
