@@ -1,12 +1,10 @@
 package com.fintech.SpringCo.data.dtos;
 
-import java.util.Date;
 
 public class DeluxeDTO extends AccountDTO {
 	
 	private String id;
 	private double balance;
-	private Date createdAt;
 	private CustomerDTO customerDTO;
 	private double interestRate;
 	
@@ -14,14 +12,12 @@ public class DeluxeDTO extends AccountDTO {
 	public DeluxeDTO() {
 		super();
 	}
-	public DeluxeDTO(String id, Date createdAt,
+	public DeluxeDTO(String id,
 					 CustomerDTO customerDTO) {
 	
 		this.id = id;
 		this.balance = 0.0;
-		this.createdAt = createdAt;
 		this.customerDTO = customerDTO;
-		this.interestRate = interestRate;
 	}
 	
 	
@@ -37,13 +33,6 @@ public class DeluxeDTO extends AccountDTO {
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
 	public CustomerDTO getCustomerDTO() {
 		return customerDTO;
 	}
@@ -56,6 +45,6 @@ public class DeluxeDTO extends AccountDTO {
 	public void setInterestRate(double interestRate) {
 		this.interestRate = interestRate;
 	}
-	
+
 
 }

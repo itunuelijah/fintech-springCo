@@ -18,6 +18,11 @@ public class Account {
     private double balance;
     private Date createdAt;
 
+
+    @Column(insertable=false, updatable=false)
+    private String type;
+
+
     @ManyToOne
     private Customer customer;
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
@@ -68,6 +73,9 @@ public class Account {
     }
     public void setAccountOperations(List<AccountOperation> accountOperations) {
         this.accountOperations = accountOperations;
+    }
+    public String getType() {
+        return type;
     }
 
 }

@@ -12,13 +12,11 @@ import com.fintech.SpringCo.web.exception.BalanceNotSufficientException;
 import com.fintech.SpringCo.web.exception.CustomerNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -28,21 +26,21 @@ public class AccountServiceImpl implements AccountService {
 
     Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
+    @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
     private AccountOperationRepository accountOperationRepository;
+
+    @Autowired
     private AccountMapperImpl dtoMapper;
+
+    @Autowired
     private CustomerService customerService;
 
-
-    public AccountServiceImpl() {
-
-        this.customerRepository = customerRepository;
-        this.accountRepository = accountRepository;
-        this.accountOperationRepository = accountOperationRepository;
-        this.dtoMapper = dtoMapper;
-        this.customerService = customerService;
-    }
 
 
     @Override
@@ -51,13 +49,17 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-        if (account instanceof Flex flex) {
+        if (account instanceof Flex) {
+            Flex flex = (Flex) account;
             return dtoMapper.fromFlex(flex);
-        } else if (account instanceof Deluxe deluxe) {
+        } else if (account instanceof Deluxe) {
+            Deluxe deluxe = (Deluxe) account;
             return dtoMapper.fromDeluxe(deluxe);
-        } else if (account instanceof Piggy piggy) {
+        } else if (account instanceof Piggy ) {
+            Piggy piggy = (Piggy) account;
             return dtoMapper.fromPiggy(piggy);
-        } else if (account instanceof Supa supa) {
+        } else if (account instanceof Supa ) {
+            Supa supa = (Supa) account;
             return dtoMapper.fromSupa(supa);
         } else {
             Viva viva = (Viva) account;
@@ -84,6 +86,9 @@ public class AccountServiceImpl implements AccountService {
 
         account.setBalance(account.getBalance() - amount);
         accountRepository.save(account);
+
+         log.info(" Saved Account  :: {}", account);
+
     }
 
 
@@ -114,23 +119,25 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Flex saveFlexAccount()
+    public FlexDTO saveFlexAccount(double initialBalance,  Long customerId)
             throws CustomerNotFoundException {
-        double initialBalance = 0.0, interestRate = 0.0;
+        Customer customer = customerRepository.findById(customerId).orElse(null);
+
+        if(customer==null) {
+            throw new CustomerNotFoundException("Customer not found");
+        }
         Flex flex = new Flex();
         flex.setId(UUID.randomUUID().toString());
         flex.setCreatedAt(new Date());
         flex.setBalance(initialBalance);
-        flex.setInterestRate(interestRate);
+       // flex.setInterestRate(interestRate);
         Flex savedFlex = accountRepository.save(flex);
-      //  Customer customer = new Customer();
-      //  customer.addAccount(savedFlex);
-        return savedFlex;
+        return dtoMapper.fromFlex(savedFlex);
     }
 
 
     @Override
-    public Deluxe saveDeluxeAccount(double initialBalance, double interestRate, Long customerId)
+    public Deluxe saveDeluxeAccount(double initialBalance,  Long customerId)
             throws CustomerNotFoundException {
         Customer customer = customerRepository.findById(customerId).orElse(null);
 
@@ -142,15 +149,14 @@ public class AccountServiceImpl implements AccountService {
         deluxe.setCreatedAt(new Date());
         deluxe.setBalance(initialBalance);
         deluxe.setCustomer(customer);
-        deluxe.setInterestRate(interestRate);
+       // deluxe.setInterestRate(interestRate);
         Deluxe savedDeluxe = accountRepository.save(deluxe);
-        customer.addAccount(savedDeluxe);
         return savedDeluxe;
     }
 
 
     @Override
-    public PiggyDTO savePiggyAccount(double initialBalance, double interestRate, Long customerId)
+    public PiggyDTO savePiggyAccount(double initialBalance, Long customerId)
             throws CustomerNotFoundException {
         Customer customer = customerRepository.findById(customerId).orElse(null);
 
@@ -162,15 +168,14 @@ public class AccountServiceImpl implements AccountService {
         piggy.setCreatedAt(new Date());
         piggy.setBalance(initialBalance);
         piggy.setCustomer(customer);
-        piggy.setInterestRate(interestRate);
+      //  piggy.setInterestRate(interestRate);
         Piggy savedPiggy = accountRepository.save(piggy);
-        customer.addAccount(savedPiggy);
         return dtoMapper.fromPiggy(savedPiggy);
     }
 
 
     @Override
-    public SupaDTO saveSupaAccount(double initialBalance, double interestRate, Long customerId)
+    public SupaDTO saveSupaAccount(double initialBalance, Long customerId)
             throws CustomerNotFoundException {
         Customer customer = customerRepository.findById(customerId).orElse(null);
 
@@ -182,15 +187,14 @@ public class AccountServiceImpl implements AccountService {
         supa.setCreatedAt(new Date());
         supa.setBalance(initialBalance);
         supa.setCustomer(customer);
-        supa.setInterestRate(interestRate);
         Supa savedSupa = accountRepository.save(supa);
-        customer.addAccount(savedSupa);
+
         return dtoMapper.fromSupa(savedSupa);
     }
 
 
     @Override
-    public VivaDTO saveVivaAccount(double initialBalance, double interestRate, Long customerId)
+    public VivaDTO saveVivaAccount(double initialBalance, Long customerId)
             throws CustomerNotFoundException {
         Customer customer = customerRepository.findById(customerId).orElse(null);
 
@@ -202,9 +206,8 @@ public class AccountServiceImpl implements AccountService {
         viva.setCreatedAt(new Date());
         viva.setBalance(initialBalance);
         viva.setCustomer(customer);
-        viva.setInterestRate(interestRate);
+//        viva.setInterestRate(interestRate);
         Viva savedViva = accountRepository.save(viva);
-        customer.addAccount(savedViva);
         return dtoMapper.fromViva(savedViva);
     }
 
@@ -241,7 +244,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-        while (account.getBalance() >= 20000) {
+        while (account.getBalance() >= 20000.0) {
             if (account instanceof Flex) {
                 double interest = account.getBalance() * numberOfYears * 2.5;
                 double balance = account.getBalance() + interest;
@@ -269,21 +272,21 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public List<Customer> filterAllCustomersWithASpecificAccountType(String accountType) {
-        List<Customer> filteredList = new ArrayList<>();
-        List<Customer> customers = customerRepository.findAll();
-        for (Customer customer : customers) {
-            if (customer.getAccounts().contains(accountType)) filteredList.add(customer);
-        }
-        return filteredList;
+    public List<Customer> filterAllCustomersWithASpecificAccountType(String type) throws AccountNotFoundException {
+
+
+        List<Customer> customers = customerRepository.findByAccountsContaining(type);
+
+        return customers;
     }
 
 
     @Override
-    public List<AccountDTO> filterAllAccountsForASpecificCustomer(String customerName) {
-        List<AccountDTO> filteredAccounts = new ArrayList<>();
-        for (AccountDTO account : listAccount()) {
-            if (account.getType().contains(customerName)) {
+    public List<Account> filterAllAccountsForASpecificCustomer(String customerName) {
+        List<Account> accounts = accountRepository.findAll();
+        List<Account> filteredAccounts = Collections.singletonList(new Account());
+        for (Account account : accounts) {
+            if (accounts.contains(customerName)) {
                 filteredAccounts.add(account);
             }
         }
@@ -309,7 +312,7 @@ public class AccountServiceImpl implements AccountService {
     public List<CustomerDTO> filterAllCustomersWithZeroBalance() {
         List<CustomerDTO> filteredCustomersList = new ArrayList<>();
         for (CustomerDTO customer : customerService.listCustomers()) {
-            if (customer.getAccount().getBalance() == 0.0) filteredCustomersList.add(customer);
+           // if (customer.getAccount().getBalance() == 0.0) filteredCustomersList.add(customer);
         }
         return filteredCustomersList;
     }

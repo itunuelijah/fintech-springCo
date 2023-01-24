@@ -2,17 +2,17 @@ package com.fintech.SpringCo.services;
 
 
 import com.fintech.SpringCo.data.dtos.CustomerDTO;
-import com.fintech.SpringCo.data.models.Account;
+
 import com.fintech.SpringCo.data.models.Customer;
 
-import com.fintech.SpringCo.data.repositories.AccountRepository;
+
 import com.fintech.SpringCo.data.repositories.CustomerRepository;
 import com.fintech.SpringCo.mappers.AccountMapperImpl;
 import com.fintech.SpringCo.web.exception.CustomerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,40 +25,27 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private  CustomerRepository customerRepository;
 
+    @Autowired
     private  AccountMapperImpl dtoMapper;
 
     @Autowired
     private  AccountServiceImpl accountService;
-//
-//    public CustomerServiceImpl(CustomerRepository customerRepository, AccountRepository accountRepository, AccountMapperImpl dtoMapper, AccountServiceImpl accountService) {
-//        this.customerRepository = customerRepository;
-//        this.dtoMapper = dtoMapper;
-//        this.accountService = accountService;
-//    }
-//
-//    public CustomerServiceImpl(){
-//    }
+
 
 
     @Override
     public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
         log.info("saving new customer");
-        //Customer customer = dtoMapper.fromCustomerDTO(customerDTO);
-        Customer customer = new Customer();
-        customer.setEmail(customerDTO.getEmail());
-        customer.setName(customerDTO.getName());
-        customer.setAccounts((List<Account>) customerDTO.getAccount());
+        Customer customer = dtoMapper.fromCustomerDTO(customerDTO);
+//        Customer customer = new Customer();
+//        customer.setEmail(customerDTO.getEmail());
+//        customer.setName(customerDTO.getName());
+//        customer.setAccounts((List<Account>) customerDTO.getAccount());
         Customer savedCustomer  = customerRepository.save(customer);
         log.info(" Saved Customer  :: {}", customer);
-        return buildCustomerDTO(savedCustomer);
+        return dtoMapper.fromCustomer(savedCustomer);
     }
 
-    private  CustomerDTO buildCustomerDTO(Customer customer){
-        return  CustomerDTO.builder()
-                .email(customer.getEmail())
-                .name(customer.getName())
-                .build();
-    }
 
 
 
@@ -67,12 +54,11 @@ public class CustomerServiceImpl implements CustomerService {
 
         List<Customer> customers = customerRepository.findAll();
         List<CustomerDTO> list = new ArrayList<>();
-        for (Customer customer : customers) {
-            CustomerDTO customerDTO = buildCustomerDTO(customer);
-            list.add(customerDTO);
-        }
-        return list;
+        return customers.stream()
+                .map(customer -> dtoMapper.fromCustomer(customer))
+                .collect(Collectors.toList());
     }
+
 
 
     @Override
@@ -91,6 +77,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer savedCustomer = customerRepository.save(customer);
         return dtoMapper.fromCustomer(savedCustomer);
     }
+
 
     @Override
     public void deleteCustomer(Long customerId) {

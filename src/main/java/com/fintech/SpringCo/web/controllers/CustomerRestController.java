@@ -2,6 +2,7 @@ package com.fintech.SpringCo.web.controllers;
 
 
 import com.fintech.SpringCo.data.dtos.CustomerDTO;
+import com.fintech.SpringCo.services.AccountService;
 import com.fintech.SpringCo.services.CustomerService;
 import com.fintech.SpringCo.web.exception.CustomerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,9 @@ public class CustomerRestController {
 
     @Autowired
     CustomerService customerService;
+
+    @Autowired
+    AccountService accountService;
 
     @GetMapping("/list")
     @ResponseBody
@@ -53,4 +57,5 @@ public class CustomerRestController {
     public void deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
     }
+
 }
