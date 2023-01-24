@@ -1,23 +1,19 @@
 package com.fintech.SpringCo.web.controllers;
 
 
-import com.fintech.SpringCo.data.dtos.AccountDTO;
-import com.fintech.SpringCo.data.dtos.CreditDTO;
-import com.fintech.SpringCo.data.dtos.CustomerDTO;
-import com.fintech.SpringCo.data.dtos.DebitDTO;
-import com.fintech.SpringCo.data.models.Account;
-import com.fintech.SpringCo.data.models.Customer;
+import com.fintech.SpringCo.data.dtos.*;
+import com.fintech.SpringCo.data.models.*;
 import com.fintech.SpringCo.services.AccountServiceImpl;
-import com.fintech.SpringCo.services.CustomerService;
+
 import com.fintech.SpringCo.services.CustomerServiceImpl;
 import com.fintech.SpringCo.web.exception.AccountNotFoundException;
 import com.fintech.SpringCo.web.exception.BalanceNotSufficientException;
+import com.fintech.SpringCo.web.exception.CustomerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
+
 
 
 @RestController
@@ -32,7 +28,7 @@ public class AccountRestController {
 
 
 
-    @GetMapping("/get/{accountId}")
+    @GetMapping("/{accountId}")
     public AccountDTO getAccount(@PathVariable String accountId) throws AccountNotFoundException {
         return accountService.getAccount(accountId);
     }
@@ -57,8 +53,77 @@ public class AccountRestController {
         return creditDTO;
     }
 
-    @GetMapping("/get/{duration}")
-    public double getInterestPerYears(@PathVariable int duration, String accountId) throws AccountNotFoundException {
+
+
+
+    @PostMapping("/saveFlex")
+    @ResponseBody
+    public FlexDTO saveFlexAccount(@RequestBody FlexDTO flexDTO) throws CustomerNotFoundException {
+
+        return accountService.saveFlexAccount(flexDTO.getBalance(), flexDTO.getCustomerDTO().getId());
+    }
+
+
+
+    @PostMapping("/saveDeluxe")
+    @ResponseBody
+    public Deluxe saveDeluxeAccount(@RequestBody DeluxeDTO deluxeDTO) throws CustomerNotFoundException {
+
+        return accountService.saveDeluxeAccount(deluxeDTO.getBalance(), deluxeDTO.getCustomerDTO().getId());
+    }
+
+
+
+    @PostMapping("/savePiggy")
+    @ResponseBody
+    public PiggyDTO savePiggyAccount(@RequestBody PiggyDTO piggyDTO) throws  CustomerNotFoundException{
+
+       return accountService.savePiggyAccount(piggyDTO.getBalance(), piggyDTO.getCustomerDTO().getId());
+    }
+
+
+
+    @PostMapping("/saveSupa")
+    @ResponseBody
+    public SupaDTO saveSupaAccount(@RequestBody SupaDTO supaDTO) throws CustomerNotFoundException {
+
+        return accountService.saveSupaAccount(supaDTO.getBalance(), supaDTO.getCustomerDTO().getId());
+    }
+
+
+
+    @PostMapping("/saveViva")
+    @ResponseBody
+    public VivaDTO saveVivaAccount(@RequestBody VivaDTO vivaDTO) throws CustomerNotFoundException {
+
+        return accountService.saveVivaAccount(vivaDTO.getBalance(), vivaDTO.getCustomerDTO().getId());
+    }
+
+    @GetMapping("/get/{accountType}")
+    public List<Customer> filterAllCustomersWithASpecificAccountType(String accountType) throws AccountNotFoundException {
+        return accountService.filterAllCustomersWithASpecificAccountType(accountType);
+
+    }
+
+    @GetMapping("/{customerName} ")
+    public List<Account> filterAllAccountsForASpecificCustomer(String customerName) {
+        return accountService.filterAllAccountsForASpecificCustomer(customerName);
+    }
+
+
+    @GetMapping("/get/noCustomer")
+    public List<Account> filterAllAccountsWithoutCustomer() {
+        return accountService.filterAllAccountsWithoutCustomer();
+    }
+
+
+    @GetMapping("/get/zeroBalance")
+    public List<CustomerDTO> filterAllCustomersWithZeroBalance() {
+        return accountService.filterAllCustomersWithZeroBalance();
+    }
+
+    @GetMapping("/duration/{duration}")
+    public double getInterestPerYears(@PathVariable Integer duration, String accountId) throws AccountNotFoundException {
         try {
             return accountService.getTheInterestWithMinBalancePerYears(duration, accountId);
         } catch (BalanceNotSufficientException e) {
@@ -66,30 +131,5 @@ public class AccountRestController {
         }
         return 0;
     }
-
-
-    @GetMapping("/get/{accountType}")
-    public List<Customer> filterAllCustomersWithASpecificAccountType(String accountType) {
-      return accountService.filterAllCustomersWithASpecificAccountType(accountType);
-
-    }
-
-
-    @GetMapping("/get/{specificCustomer} ")
-    public List<AccountDTO> filterAllAccountsForASpecificCustomer(String customerName) {
-       return  accountService.filterAllAccountsForASpecificCustomer(customerName);
-    }
-
-
-    @GetMapping("/get/noCustomer")
-    public List<Account> filterAllAccountsWithoutCustomer() {
-      return accountService.filterAllAccountsWithoutCustomer();
-    }
-
-
-    @GetMapping("/get/zeroBalance")
-    public List<CustomerDTO> filterAllCustomersWithZeroBalance() {
-     return  accountService.filterAllCustomersWithZeroBalance();
-}
 
 }

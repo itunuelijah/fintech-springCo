@@ -26,7 +26,7 @@ class CustomerRepositoryTest {
         customerDTO = CustomerDTO.builder()
                 .id(234l)
                 .name("olusola")
-                .account(customerDTO.getAccount())
+            //    .account(customerDTO.getAccount())
                 .email("olusola@gmail.com").build();
     }
     @Test

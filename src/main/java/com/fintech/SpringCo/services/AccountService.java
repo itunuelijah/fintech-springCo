@@ -23,28 +23,27 @@ public interface AccountService {
     void transfer(String accountIdSource, String accountIdDestination, double amount) throws AccountNotFoundException, BalanceNotSufficientException;
 
 
-
-    Account saveFlexAccount()
+    FlexDTO saveFlexAccount(double initialBalance,  Long customerId)
             throws CustomerNotFoundException;
 
-    Deluxe saveDeluxeAccount(double initialBalance, double interestRate, Long customerId)
+    Deluxe saveDeluxeAccount(double initialBalance,  Long customerId)
             throws CustomerNotFoundException;
 
-    PiggyDTO savePiggyAccount(double initialBalance, double interestRate, Long customerId)
+    PiggyDTO savePiggyAccount(double initialBalance,  Long customerId)
             throws CustomerNotFoundException;
 
-    SupaDTO saveSupaAccount(double initialBalance, double interestRate, Long customerId)
+    SupaDTO saveSupaAccount(double initialBalance,  Long customerId)
             throws CustomerNotFoundException;
 
-    VivaDTO saveVivaAccount(double initialBalance, double interestRate, Long customerId)
+    VivaDTO saveVivaAccount(double initialBalance,  Long customerId)
             throws CustomerNotFoundException;
 
     List<AccountDTO> listAccount();
     double getTheInterestWithMinBalancePerYears(int numberOfYears, String accountId) throws AccountNotFoundException, BalanceNotSufficientException;
 
-    List<Customer> filterAllCustomersWithASpecificAccountType(String accountType);
+    List<Customer> filterAllCustomersWithASpecificAccountType(String accountType) throws AccountNotFoundException;
 
-    List<AccountDTO> filterAllAccountsForASpecificCustomer(String name);
+    List<Account> filterAllAccountsForASpecificCustomer(String name);
 
     List<Account> filterAllAccountsWithoutCustomer();
 
